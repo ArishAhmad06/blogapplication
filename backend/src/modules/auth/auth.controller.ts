@@ -1,14 +1,19 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { success } from "zod";
+import { registerUserDTO } from "./auth.schema.js";
 
 export const registerUserController = catchAsync(
   async (req: Request, res: Response) => {
-    const { username, email, password } = req.body;
+    const { username, email, password }: registerUserDTO = req.body;
     console.log({ username, email, password });
     return res.status(201).json({
       success: true,
       message: "Account created successfully",
+      data: {
+        username,
+        email,
+      },
     });
   },
 );

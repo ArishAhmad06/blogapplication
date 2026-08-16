@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { FRONTEND_URL } from "./config/config.js";
-import { globalErrorHandler } from "./middlewares/globalErrorHandler.js";
+import { globalErrorHandler } from "./middlewares/error.middleware.js";
 
 export const app = express();
 
