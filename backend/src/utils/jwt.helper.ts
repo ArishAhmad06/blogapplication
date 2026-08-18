@@ -18,6 +18,7 @@ export const generateAccessToken = (userId: string) => {
     expiresIn: ACCESS_TOKEN_EXPIRY!,
   });
 };
+//
 
 export const generateRefreshToken = (userId: string) => {
   return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
