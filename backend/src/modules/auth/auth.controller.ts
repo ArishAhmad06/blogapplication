@@ -1,19 +1,15 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync.js";
-import { success } from "zod";
-import { registerUserDTO } from "./auth.schema.js";
+import { catchAsync } from "../../utils/CatchAsync.js";
+import { authService } from "./auth.service.js";
 
 export const registerUserController = catchAsync(
   async (req: Request, res: Response) => {
-    const { username, email, password }: registerUserDTO = req.body;
-    console.log({ username, email, password });
+    const result = await authService.registerUser(req.body);
+
     return res.status(201).json({
       success: true,
       message: "Account created successfully",
-      data: {
-        username,
-        email,
-      },
+      data: result,
     });
   },
 );
