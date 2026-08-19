@@ -5,3 +5,9 @@ export interface IUserResponse {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data?: T;
+};
