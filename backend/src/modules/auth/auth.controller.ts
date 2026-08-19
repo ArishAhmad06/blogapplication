@@ -14,3 +14,15 @@ export const registerUserController = catchAsync(
     });
   },
 );
+
+export const loginUserController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await authService.loginUser(req.body);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Logged in successfully",
+      data: result,
+    });
+  },
+);

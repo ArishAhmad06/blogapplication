@@ -1,7 +1,11 @@
-import { registerUserDTO } from "./auth.schema.js";
+import { loginUserDTO, registerUserDTO } from "./auth.schema.js";
 import { authRepository } from "./auth.repository.js";
 import { AppError } from "../../utils/AppError.js";
-import { hashPassword } from "../../utils/auth.helper.js";
+import {
+  comparePassword,
+  hashPassword,
+  hashRefreshToken,
+} from "../../utils/auth.helper.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -35,14 +39,50 @@ export const authService = {
     const accessToken = generateAccessToken(newUser.id);
     const refreshToken = generateRefreshToken(newUser.id);
 
+    const hashedRefreshToken = hashRefreshToken(refreshToken);
+
     await authRepository.createRefreshToken({
-      token: refreshToken,
+      token: hashedRefreshToken,
       userId: newUser.id,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     return {
       user: toUserResponse(newUser),
+      accessToken,
+      refreshToken,
+    };
+  },
+
+  loginUser: async (body: loginUserDTO) => {
+    const { email, password } = body;
+
+    //find user
+    const user = await authRepository.findUserByEmail(email);
+    if (!user) {
+      throw new AppError("Invalid email or password", 404);
+    }
+
+    //compare password
+    const isPassword = await comparePassword(password, user.password);
+    if (!isPassword) {
+      throw new AppError("Invalid email or password", 401);
+    }
+
+    // if password is correct - generate access tokens
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    const hashedRefreshToken = hashRefreshToken(refreshToken);
+
+    //store refresh token
+    await authRepository.createRefreshToken({
+      token: hashedRefreshToken,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+    return {
+      user: toUserResponse(user),
       accessToken,
       refreshToken,
     };
