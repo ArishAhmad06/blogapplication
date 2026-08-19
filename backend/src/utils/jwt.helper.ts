@@ -18,7 +18,6 @@ export const generateAccessToken = (userId: string) => {
     expiresIn: ACCESS_TOKEN_EXPIRY!,
   });
 };
-//
 
 export const generateRefreshToken = (userId: string) => {
   return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
@@ -33,3 +32,4 @@ export const verifyAccessToken = (token: string) => {
 export const verifyRefreshToken = (token: string) => {
   return jwt.verify(token, REFRESH_TOKEN_SECRET);
 };
+
