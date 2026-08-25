@@ -1,6 +1,15 @@
 import { prisma } from "../../lib/prisma.js";
 
 export const authRepository = {
+  findUserById: async (id: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  },
+
   findUserByUsername: async (username: string) => {
     const user = await prisma.user.findUnique({
       where: {

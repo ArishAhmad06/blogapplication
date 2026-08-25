@@ -3,6 +3,8 @@ import { catchAsync } from "../../utils/CatchAsync.js";
 import { authService } from "./auth.service.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import { success } from "zod";
+import { AppError } from "../../utils/AppError.js";
+import { NextFunction } from "express-serve-static-core";
 
 export const registerUserController = catchAsync(
   async (req: Request, res: Response) => {
@@ -35,6 +37,22 @@ export const refreshTokenController = catchAsync(
     sendResponse(res, 202, {
       success: true,
       message: "Token refreshed successfully",
+      data: result,
+    });
+  },
+);
+
+export const currentUserController = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new AppError("Unauthorized request", 401);
+    }
+    const result = await authService.getCurrentUser(userId);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "User detail fetched suceefully",
       data: result,
     });
   },

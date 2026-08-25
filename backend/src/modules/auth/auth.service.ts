@@ -126,4 +126,15 @@ export const authService = {
       refreshToken: newRefreshToken,
     };
   },
+
+  getCurrentUser: async (userId: string) => {
+    const user = await authRepository.findUserById(userId);
+
+    if (!user) {
+      throw new AppError("user not found", 404);
+    }
+    return {
+      user: toUserResponse(user),
+    };
+  },
 };

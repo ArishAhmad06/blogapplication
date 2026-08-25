@@ -3,8 +3,10 @@ import {
   registerUserController,
   loginUserController,
   refreshTokenController,
+  currentUserController,
 } from "./auth.controller.js";
 import { validate } from "../../middlewares/validate.middleware.js";
+import { verifyUser } from "../../middlewares/auth.middleware.js";
 import {
   loginUserSchema,
   refreshTokenSchema,
@@ -21,5 +23,7 @@ router.route("/login").post(validate(loginUserSchema), loginUserController);
 router
   .route("/refreshToken")
   .post(validate(refreshTokenSchema), refreshTokenController);
+
+router.route("/me").get(verifyUser, currentUserController);
 
 export default router;
