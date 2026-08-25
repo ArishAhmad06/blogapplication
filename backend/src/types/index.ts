@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export interface IUserResponse {
   id: string;
   username: string;
@@ -11,3 +13,7 @@ export type ApiResponse<T> = {
   message: string;
   data?: T;
 };
+
+export interface IJwtPayLoad {
+  userId: string;
+}

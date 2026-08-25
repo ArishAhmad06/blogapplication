@@ -1,16 +1,19 @@
-import { loginUserDTO, registerUserDTO } from "./auth.schema.js";
+import {
+  loginUserDTO,
+  refreshTokenDTO,
+  registerUserDTO,
+} from "./auth.schema.js";
 import { authRepository } from "./auth.repository.js";
 import { AppError } from "../../utils/AppError.js";
-import {
-  comparePassword,
-  hashPassword,
-  hashRefreshToken,
-} from "../../utils/auth.helper.js";
+import { comparePassword, hashRefreshToken } from "../../utils/auth.helper.js";
 import {
   generateAccessToken,
   generateRefreshToken,
+  verifyRefreshToken,
 } from "../../utils/jwt.helper.js";
 import { toUserResponse } from "./auth.mapper.js";
+import { IJwtPayLoad } from "../../types/index.js";
+import { decode } from "node:punycode";
 
 export const authService = {
   registerUser: async (body: registerUserDTO) => {
@@ -28,7 +31,7 @@ export const authService = {
       throw new AppError("user already exists", 400);
     }
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashRefreshToken(password);
 
     const newUser = await authRepository.createUser(
       username,
@@ -85,6 +88,42 @@ export const authService = {
       user: toUserResponse(user),
       accessToken,
       refreshToken,
+    };
+  },
+
+  refreshToken: async (body: refreshTokenDTO) => {
+    const { token } = body;
+    if (!token) {
+      throw new AppError("Refresh token required", 401);
+    }
+    let decoded;
+    try {
+      decoded = verifyRefreshToken(token) as IJwtPayLoad;
+    } catch {
+      throw new AppError("Invalid or expired refresh token", 403);
+    }
+    const hashedToken = hashRefreshToken(token);
+
+    const existingToken = await authRepository.findRefreshToken(hashedToken);
+    if (!existingToken) {
+      throw new AppError("Refresh token not found", 403);
+    }
+
+    await authRepository.deleteRefreshTokenById(existingToken.id);
+
+    const newAccessToken = generateAccessToken(decoded.userId);
+    const newRefreshToken = generateRefreshToken(decoded.userId);
+
+    const newRefreshTokenHashed = hashRefreshToken(newRefreshToken);
+
+    await authRepository.createRefreshToken({
+      token: newRefreshTokenHashed,
+      userId: decoded.userId,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
     };
   },
 };
