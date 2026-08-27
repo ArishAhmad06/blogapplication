@@ -24,4 +24,4 @@ export const refreshTokenSchema = z
 
 export type registerUserDTO = z.infer<typeof registerUserSchema>;
 export type loginUserDTO = z.infer<typeof loginUserSchema>;
-export type refreshTokenDTO = z.infer<typeof refreshTokenSchema>;
+

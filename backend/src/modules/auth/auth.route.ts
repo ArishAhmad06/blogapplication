@@ -27,4 +27,3 @@ router
 router.route("/me").get(verifyUser, currentUserController);
 
 export default router;
-// not now
