@@ -24,9 +24,7 @@ export const verifyUser = async (
       throw new AppError("Unauthorized request", 401);
     }
 
-    req.user = {
-      userId: decoded.userId,
-    };
+    req.userId = decoded.userId;
 
     next();
   } catch (error) {

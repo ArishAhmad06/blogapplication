@@ -5,6 +5,7 @@ import { sendResponse } from "../../utils/sendResponse.js";
 import { success } from "zod";
 import { AppError } from "../../utils/AppError.js";
 import { NextFunction } from "express-serve-static-core";
+import { send } from "node:process";
 
 export const registerUserController = catchAsync(
   async (req: Request, res: Response) => {
@@ -44,16 +45,37 @@ export const refreshTokenController = catchAsync(
 
 export const currentUserController = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = req.user?.userId;
-    if (!userId) {
+    if (!req?.userId) {
       throw new AppError("Unauthorized request", 401);
     }
-    const result = await authService.getCurrentUser(userId);
+    const result = await authService.getCurrentUser(req?.userId as string);
 
     sendResponse(res, 200, {
       success: true,
       message: "User detail fetched suceefully",
       data: result,
+    });
+  },
+);
+
+export const logoutController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+
+    const result = await authService.logout(refreshToken);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "logged out successfully",
+    });
+  },
+);
+export const logoutAllController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await authService.logoutAllDevices(req.userId as string);
+    sendResponse(res, 200, {
+      success: true,
+      message: "Logged out of all devices",
     });
   },
 );

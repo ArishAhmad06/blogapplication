@@ -13,7 +13,6 @@ import {
 } from "../../utils/jwt.helper.js";
 import { toUserResponse } from "./auth.mapper.js";
 import { IJwtPayLoad } from "../../types/index.js";
-import { decode } from "node:punycode";
 
 export const authService = {
   registerUser: async (body: registerUserDTO) => {
@@ -136,5 +135,35 @@ export const authService = {
     return {
       user: toUserResponse(user),
     };
+  },
+
+  // single device logged out
+  logout: async (refreshToken: string) => {
+    if (!refreshToken) {
+      throw new AppError("Refresh token required", 401);
+    }
+
+    const refreshTokenHashed = hashRefreshToken(refreshToken);
+
+    const existingToken =
+      await authRepository.findRefreshToken(refreshTokenHashed);
+
+    if (!existingToken) {
+      throw new AppError("session not found or already logged out", 401);
+    }
+    await authRepository.deleteRefreshTokenById(existingToken.id);
+
+    return true;
+  },
+
+  // all device logged out
+  logoutAllDevices: async (userId: string) => {
+    if (!userId) {
+      throw new AppError("User not found", 404);
+    }
+
+    await authRepository.deleteRefreshTokenByUser(userId);
+
+    return true;
   },
 };

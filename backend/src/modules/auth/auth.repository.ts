@@ -59,10 +59,33 @@ export const authRepository = {
     return refreshToken;
   },
 
+  findRefreshTokenByUserId: async (userId: string) => {
+    return prisma.refreshToken.findMany({
+      where: {
+        userId,
+      },
+    });
+  },
+
   deleteRefreshTokenById: async (id: string) => {
     return await prisma.refreshToken.delete({
       where: {
         id,
+      },
+    });
+  },
+
+  deleteRefreshTokenByToken: async (token: string) => {
+    return prisma.refreshToken.delete({
+      where: {
+        token,
+      },
+    });
+  },
+  deleteRefreshTokenByUser: async (userId: string) => {
+    return prisma.refreshToken.deleteMany({
+      where: {
+        userId,
       },
     });
   },
