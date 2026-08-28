@@ -1,13 +1,16 @@
+import { AuthRepository } from "./auth.repository.js";
+import { AuthService } from "./auth.service.js";
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/CatchAsync.js";
-import { authService } from "./auth.service.js";
 import { sendResponse } from "../../utils/sendResponse.js";
-import { success } from "zod";
 import { AppError } from "../../utils/AppError.js";
 import { NextFunction } from "express-serve-static-core";
 
+const authRepository = new AuthRepository();
+const authService = new AuthService(authRepository);
+
 export const registerUserController = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response) => { 
     const result = await authService.registerUser(req.body);
 
     sendResponse(res, 201, {
