@@ -5,7 +5,6 @@ import { sendResponse } from "../../utils/sendResponse.js";
 import { success } from "zod";
 import { AppError } from "../../utils/AppError.js";
 import { NextFunction } from "express-serve-static-core";
-import { send } from "node:process";
 
 export const registerUserController = catchAsync(
   async (req: Request, res: Response) => {
@@ -70,6 +69,7 @@ export const logoutController = catchAsync(
     });
   },
 );
+
 export const logoutAllController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await authService.logoutAllDevices(req.userId as string);
