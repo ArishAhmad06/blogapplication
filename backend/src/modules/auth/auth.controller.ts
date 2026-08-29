@@ -79,6 +79,7 @@ export const logoutAllController = catchAsync(
     sendResponse(res, 200, {
       success: true,
       message: "Logged out of all devices",
+      // add some  comment
     });
   },
 );
