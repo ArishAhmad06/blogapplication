@@ -144,7 +144,7 @@ export class AuthService {
     };
   }
 
-  // single device logged out
+  // single device logged out.
   async logout(refreshToken: string) {
     if (!refreshToken) {
       throw new AppError("Refresh token required", 401);
