@@ -5,7 +5,12 @@ import {
 } from "./auth.schema.js";
 import { IAuthRepository } from "./auth.repository.interface.js";
 import { AppError } from "../../utils/AppError.js";
-import { comparePassword, hashRefreshToken } from "../../utils/auth.helper.js";
+import {
+  comparePassword,
+  hashPassword,
+  hashRefreshToken,
+  setCookies,
+} from "../../utils/auth.helper.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -35,7 +40,7 @@ export class AuthService {
       throw new AppError("user already exists", 400);
     }
 
-    const hashedPassword = await hashRefreshToken(password);
+    const hashedPassword = await hashPassword(password);
 
     const newUser = await this.repo.createUser(username, email, hashedPassword);
 

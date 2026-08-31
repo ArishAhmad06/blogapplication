@@ -11,7 +11,7 @@ export const userResponseSchema = z.object({
 export const authResponseSchema = z.object({
   user: userResponseSchema,
   accessToken: z.string(),
-  RefreshToken: z.string(),
+  refreshToken: z.string(),
 });
 
 export type UserResponseDTO = z.infer<typeof userResponseSchema>;

@@ -8,8 +8,8 @@ export const globalErrorHandler = (
   next: NextFunction,
 ) => {
   let error = { ...err };
+  
   error.message = err.message;
-
   error.statusCode = err.statusCode || 500;
   error.status = err.status || "error";
 
@@ -24,7 +24,7 @@ export const globalErrorHandler = (
 
   //production:hide internal details
   if (err.isOperational) {
-    return res.status(error.status).json({
+    return res.status(error.statusCode).json({
       status: error.status,
       message: error.message,
     });

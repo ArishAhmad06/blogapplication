@@ -1,17 +1,15 @@
-import { AuthRepository } from "./auth.repository.js";
-import { AuthService } from "./auth.service.js";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/CatchAsync.js";
+import { authService } from "./auth.container.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import { AppError } from "../../utils/AppError.js";
-import { NextFunction } from "express-serve-static-core";
-
-const authRepository = new AuthRepository();
-const authService = new AuthService(authRepository);
+import { destroyCookies, setCookies } from "../../utils/auth.helper.js";
 
 export const registerUserController = catchAsync(
-  async (req: Request, res: Response) => { 
+  async (req: Request, res: Response) => {
     const result = await authService.registerUser(req.body);
+
+    setCookies(res, result.accessToken, result.refreshToken);
 
     sendResponse(res, 201, {
       success: true,
@@ -25,6 +23,8 @@ export const loginUserController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await authService.loginUser(req.body);
 
+    setCookies(res, result.accessToken, result.refreshToken);
+
     sendResponse(res, 200, {
       success: true,
       message: "Logged in successfully",
@@ -36,6 +36,8 @@ export const loginUserController = catchAsync(
 export const refreshTokenController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await authService.refreshToken(req.body);
+
+    setCookies(res, result.accessToken, result.refreshToken);
 
     sendResponse(res, 202, {
       success: true,
@@ -66,6 +68,8 @@ export const logoutController = catchAsync(
 
     const result = await authService.logout(refreshToken);
 
+    destroyCookies(res);
+
     sendResponse(res, 200, {
       success: true,
       message: "logged out successfully",
@@ -76,6 +80,9 @@ export const logoutController = catchAsync(
 export const logoutAllController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await authService.logoutAllDevices(req.userId as string);
+
+    destroyCookies(res);
+
     sendResponse(res, 200, {
       success: true,
       message: "Logged out of all devices",
