@@ -1,0 +1,1 @@
+import { createPostDTO } from "./post.schema.js";

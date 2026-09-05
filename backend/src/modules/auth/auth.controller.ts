@@ -81,6 +81,7 @@ export const logoutAllController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await authService.logoutAllDevices(req.userId as string);
 
+    destroyCookies(res);
     sendResponse(res, 200, {
       success: true,
       message: "Logged out of all devices",
