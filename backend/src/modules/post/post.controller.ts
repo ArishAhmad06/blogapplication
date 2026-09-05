@@ -1,22 +1,24 @@
 import { catchAsync } from "../../utils/CatchAsync.js";
 import { Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse.js";
-import { verifyUser } from "../../middlewares/auth.middleware.js";
+import postService from "./post.container.js";
 
 export const createPostController = catchAsync(
   async (req: Request, res: Response) => {
-    const { title, description } = req.body;
-    const data = {
-      title: title,
-      description: description,
-      userId: req.userId,
-      file: req.file,
-    };
-    const result = await postService.createPost(data, verifyUser);
+    let result;
+    if (req.file?.path) {
+      result = await postService.createPost(
+        req.body,
+        req.userId as string,
+        req.file?.path,
+      );
+    } else {
+      result = await postService.createPost(req.body, req.userId as string);
+    }
 
     sendResponse(res, 201, {
       success: true,
-      message: "Post created",
+      message: "Post created successfullly",
       data: result,
     });
   },
