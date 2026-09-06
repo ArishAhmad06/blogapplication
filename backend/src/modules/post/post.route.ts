@@ -5,6 +5,7 @@ import { verifyUser } from "../../middlewares/auth.middleware.js";
 import { authService } from "../auth/auth.container.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import { createPostController } from "./post.controller.js";
+import { defaultMaxListeners } from "node:events";
 
 const router = express.Router();
 router
@@ -15,3 +16,5 @@ router
     upload.single("media"),
     createPostController,
   );
+
+  export default router;
