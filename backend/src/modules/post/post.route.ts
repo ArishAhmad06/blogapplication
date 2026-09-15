@@ -11,8 +11,8 @@ router
   .route("/create")
   .post(
     verifyUser(authService),
-    validate(createPostSchema),
     upload.single("media"),
+    validate(createPostSchema),
     createPostController,
   );
 
