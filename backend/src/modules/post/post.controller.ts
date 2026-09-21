@@ -23,3 +23,13 @@ export const createPostController = catchAsync(
     });
   },
 );
+
+export const getUserPostsController = catchAsync(async (req: Request, res: Response) => {
+  const result = await postService.getUserPosts(req.userId as string);
+
+  sendResponse(res, 200, {
+    success: true,
+    message: "User posts fetched successfully",
+    data: result,
+  });
+});

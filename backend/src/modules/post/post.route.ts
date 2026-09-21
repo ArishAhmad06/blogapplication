@@ -4,7 +4,10 @@ import { createPostSchema } from "./post.schema.js";
 import { verifyUser } from "../../middlewares/auth.middleware.js";
 import { authService } from "../auth/auth.container.js";
 import { upload } from "../../middlewares/multer.middleware.js";
-import { createPostController } from "./post.controller.js";
+import {
+  createPostController,
+  getUserPostsController,
+} from "./post.controller.js";
 
 const router = express.Router();
 router
@@ -15,6 +18,5 @@ router
     validate(createPostSchema),
     createPostController,
   );
-
-  export default router;
-  // addd comment
+router.route("/user").get(verifyUser(authService), getUserPostsController);
+export default router;

@@ -24,4 +24,9 @@ export class PostService {
     }
     return createdPost;
   }
+
+  async getUserPosts(userId: string) {
+    const posts = await this.repo.getPostsByUserId(userId);
+    return posts;
+  }
 }
