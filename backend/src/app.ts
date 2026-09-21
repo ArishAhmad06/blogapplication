@@ -7,6 +7,7 @@ import { globalErrorHandler } from "./middlewares/error.middleware.js";
 export const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -22,7 +23,7 @@ app.get("/health-check", (req: Request, res: Response) => {
 });
 
 import authRouter from "./modules/auth/auth.route.js";
-import postRouter from "./modules/post/post.route.js"
+import postRouter from "./modules/post/post.route.js";
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/post", postRouter);

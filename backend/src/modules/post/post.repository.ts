@@ -30,4 +30,25 @@ export class PostRepository implements IPostReposiotory {
     }
     return createdPost;
   }
+
+  async getAllPosts(cursor?: string, limit: number = 10): Promise<Post[]> {
+    const posts = await prisma.post.findMany({
+      take: limit,
+      skip: cursor ? 1 : 0,
+      cursor: cursor ? { id: cursor } : undefined,
+      orderBy: {
+        createdAt: "desc",
+      },
+      Select: {
+        id: true,
+        title: true,
+        description: true,
+        imageUrl: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+      },
+    });
+    return posts;
+  }
 }
