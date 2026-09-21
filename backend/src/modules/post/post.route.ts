@@ -18,5 +18,5 @@ router
     validate(createPostSchema),
     createPostController,
   );
-router.route("/user").get(verifyUser(authService), getUserPostsController);
+router.route("/your-posts").get(verifyUser(authService), getUserPostsController);
 export default router;
