@@ -10,6 +10,7 @@ import {
   getUserPostsController,
   updatePostController,
   deletePostController,
+  getPostByIdController,
 } from "./post.controller.js";
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router
     createPostController,
   );
 router.route("/").get(getAllPostsController);
+router.route("/:id").get(getPostByIdController);
 router
   .route("/your-posts")
   .get(verifyUser(authService), getUserPostsController);

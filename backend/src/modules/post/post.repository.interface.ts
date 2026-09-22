@@ -8,6 +8,8 @@ export interface IPostReposiotory {
     userId: string,
     imageUrl?: string,
   ): Promise<Post>;
+
+  getPostById(postId: string): Promise<Post | null>;
   getPostsByUserId(userId: string): Promise<Post[]>;
 
   updatePost(postId: string, data: updatePostDTO): Promise<Post>;

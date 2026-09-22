@@ -32,15 +32,19 @@ export class PostRepository implements IPostReposiotory {
     return createdPost;
   }
 
-
-  
-
   async getAllPosts(): Promise<Post[]> {
     const posts = await prisma.post.findMany({});
     return posts;
   }
 
-
+  async getPostById(postId: string): Promise<Post | null> {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+    return post;
+  }
 
   async getPostsByUserId(userId: string): Promise<Post[]> {
     const posts = await prisma.post.findMany({

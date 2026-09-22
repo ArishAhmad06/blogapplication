@@ -36,6 +36,14 @@ export class PostService {
     return posts;
   }
 
+  async getPostById(postId: string) {
+    const post = await this.repo.getPostById(postId);
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
+    return post;
+  }
+
   async getUserPosts(userId: string) {
     const posts = await this.repo.getPostsByUserId(userId);
     return posts;
