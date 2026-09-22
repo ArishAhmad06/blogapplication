@@ -1,4 +1,7 @@
-import { uploadToCloudinary } from "../../utils/cloudinary.helper.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "../../utils/cloudinary.helper.js";
 import { createPostDTO } from "./post.schema.js";
 import { IPostReposiotory } from "./post.repository.interface.js";
 import { updatePostDTO } from "./post.schema.js";
@@ -52,6 +55,10 @@ export class PostService {
     if (!post) {
       throw new AppError("Post not found", 404);
     }
+    if (post.imageUrl) {
+      await deleteFromCloudinary(post.imageUrl);
+    }
+
     await this.repo.deletePost(postId);
     return true;
   }
