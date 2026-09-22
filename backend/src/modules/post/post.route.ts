@@ -1,12 +1,13 @@
 import express from "express";
 import { validate } from "../../middlewares/validate.middleware.js";
-import { createPostSchema } from "./post.schema.js";
+import { createPostSchema, updatePostSchema } from "./post.schema.js";
 import { verifyUser } from "../../middlewares/auth.middleware.js";
 import { authService } from "../auth/auth.container.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import {
   createPostController,
   getUserPostsController,
+  updatePostController,
 } from "./post.controller.js";
 
 const router = express.Router();
@@ -18,5 +19,16 @@ router
     validate(createPostSchema),
     createPostController,
   );
-router.route("/your-posts").get(verifyUser(authService), getUserPostsController);
+router
+  .route("/your-posts")
+  .get(verifyUser(authService), getUserPostsController);
+router
+  .route("/:id")
+  .patch(
+    verifyUser(authService),
+    validate(updatePostSchema),
+    updatePostController,
+  );
+
+
 export default router;

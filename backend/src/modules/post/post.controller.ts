@@ -2,6 +2,7 @@ import { catchAsync } from "../../utils/CatchAsync.js";
 import { Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse.js";
 import postService from "./post.container.js";
+import { success } from "zod";
 
 export const createPostController = catchAsync(
   async (req: Request, res: Response) => {
@@ -24,12 +25,31 @@ export const createPostController = catchAsync(
   },
 );
 
-export const getUserPostsController = catchAsync(async (req: Request, res: Response) => {
-  const result = await postService.getUserPosts(req.userId as string);
+export const getUserPostsController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await postService.getUserPosts(req.userId as string);
 
-  sendResponse(res, 200, {
-    success: true,
-    message: "User posts fetched successfully",
-    data: result,
-  });
-});
+    sendResponse(res, 200, {
+      success: true,
+      message: "User posts fetched successfully",
+      data: result,
+    });
+  },
+);
+
+export const updatePostController = catchAsync(
+  async (req: Request, res: Response) => {
+    const postId = req.params.id as string;
+    const result = await postService.updatePost(
+      postId,
+      req.userId as string,
+      req.body,
+    );
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Post updated Successfully",
+      data: result,
+    });
+  },
+);

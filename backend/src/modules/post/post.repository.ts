@@ -1,6 +1,7 @@
 import { Post } from "../../../generated/prisma/index.js";
 import { IPostReposiotory } from "./post.repository.interface.js";
 import { prisma } from "../../lib/prisma.js";
+import { updatePostDTO } from "./post.schema.js";
 
 export class PostRepository implements IPostReposiotory {
   async createPost(
@@ -40,6 +41,28 @@ export class PostRepository implements IPostReposiotory {
     return posts;
   }
 
+  async getPostByPostIdAndUserId(postId: string, userId: string) {
+    const post = await prisma.post.findFirst({
+      where: {
+        id: postId,
+        userId,
+      },
+    });
+    return post;
+  }
+
+  async updatePost(postId: string, data: updatePostDTO): Promise<Post> {
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        title: data.title,
+        description: data.description,
+      },
+    });
+    return updatedPost;
+  }
   // async getAllPosts(cursor?: string, limit: number = 10): Promise<Post[]> {
   //   const posts = await prisma.post.findMany({
   //     take: limit,
