@@ -24,6 +24,22 @@ export const createPostController = catchAsync(
   },
 );
 
+export const getAllPostsController = catchAsync(
+  async (req: Request, res: Response) => {
+    // const { cursor, limit } = req.query;
+
+    // const parsedLimit = limit ? parseInt(limit as string) : 10;
+
+    const result = await postService.getAllPosts();
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "User all posts fetched successfully",
+      data: result,
+    });
+  },
+);
+
 export const getUserPostsController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await postService.getUserPosts(req.userId as string);

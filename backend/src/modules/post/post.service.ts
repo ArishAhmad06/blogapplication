@@ -27,6 +27,12 @@ export class PostService {
     return createdPost;
   }
 
+  async getAllPosts() {
+    const posts = await this.repo.getAllPosts();
+
+    return posts;
+  }
+
   async getUserPosts(userId: string) {
     const posts = await this.repo.getPostsByUserId(userId);
     return posts;
@@ -46,10 +52,6 @@ export class PostService {
     if (!post) {
       throw new AppError("Post not found", 404);
     }
-
-    // if (post.imageUrl) {
-    //   await this.fileService.delete(post.imageUrl);
-    // }
     await this.repo.deletePost(postId);
     return true;
   }

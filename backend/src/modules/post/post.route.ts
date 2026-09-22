@@ -6,6 +6,7 @@ import { authService } from "../auth/auth.container.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import {
   createPostController,
+  getAllPostsController,
   getUserPostsController,
   updatePostController,
   deletePostController,
@@ -20,6 +21,7 @@ router
     validate(createPostSchema),
     createPostController,
   );
+router.route("/").get(getAllPostsController);
 router
   .route("/your-posts")
   .get(verifyUser(authService), getUserPostsController);

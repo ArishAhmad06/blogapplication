@@ -18,5 +18,5 @@ export interface IPostReposiotory {
   ): Promise<Post | null>;
 
   deletePost(postId: string): Promise<void>;
-  // getAllPosts(cursor?: string, limit?: number): Promise<Post[]>;
+  getAllPosts(cursor?: string, limit?: number): Promise<Post[]>;
 }
