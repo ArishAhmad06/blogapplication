@@ -13,7 +13,7 @@ export interface IPostReposiotory {
   updatePost(
     postId: string,
     data: updatePostDTO,
-  ): Promise<any>;
+  ): Promise<Post>;
 
   getPostByPostIdAndUserId(
     postId: string,

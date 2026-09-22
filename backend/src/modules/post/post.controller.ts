@@ -2,7 +2,6 @@ import { catchAsync } from "../../utils/CatchAsync.js";
 import { Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse.js";
 import postService from "./post.container.js";
-import { success } from "zod";
 
 export const createPostController = catchAsync(
   async (req: Request, res: Response) => {
@@ -53,3 +52,4 @@ export const updatePostController = catchAsync(
     });
   },
 );
+

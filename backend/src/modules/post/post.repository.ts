@@ -41,7 +41,10 @@ export class PostRepository implements IPostReposiotory {
     return posts;
   }
 
-  async getPostByPostIdAndUserId(postId: string, userId: string) {
+  async getPostByPostIdAndUserId(
+    postId: string,
+    userId: string,
+  ): Promise<Post | null> {
     const post = await prisma.post.findFirst({
       where: {
         id: postId,
@@ -56,13 +59,18 @@ export class PostRepository implements IPostReposiotory {
       where: {
         id: postId,
       },
-      data: {
+       data: {
+      ...(data.title !== undefined && {
         title: data.title,
+      }),
+      ...(data.description !== undefined && {
         description: data.description,
-      },
+      }),
+    },
     });
     return updatedPost;
   }
+
   // async getAllPosts(cursor?: string, limit: number = 10): Promise<Post[]> {
   //   const posts = await prisma.post.findMany({
   //     take: limit,
