@@ -10,15 +10,13 @@ export interface IPostReposiotory {
   ): Promise<Post>;
   getPostsByUserId(userId: string): Promise<Post[]>;
 
-  updatePost(
-    postId: string,
-    data: updatePostDTO,
-  ): Promise<Post>;
+  updatePost(postId: string, data: updatePostDTO): Promise<Post>;
 
   getPostByPostIdAndUserId(
     postId: string,
     userId: string,
   ): Promise<Post | null>;
 
+  deletePost(postId: string): Promise<void>;
   // getAllPosts(cursor?: string, limit?: number): Promise<Post[]>;
 }

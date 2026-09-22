@@ -8,6 +8,7 @@ import {
   createPostController,
   getUserPostsController,
   updatePostController,
+  deletePostController,
 } from "./post.controller.js";
 
 const router = express.Router();
@@ -29,6 +30,6 @@ router
     validate(updatePostSchema),
     updatePostController,
   );
-
+router.route("/:id").delete(verifyUser(authService), deletePostController);
 
 export default router;

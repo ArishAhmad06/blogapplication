@@ -59,36 +59,23 @@ export class PostRepository implements IPostReposiotory {
       where: {
         id: postId,
       },
-       data: {
-      ...(data.title !== undefined && {
-        title: data.title,
-      }),
-      ...(data.description !== undefined && {
-        description: data.description,
-      }),
-    },
+      data: {
+        ...(data.title !== undefined && {
+          title: data.title,
+        }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
+      },
     });
     return updatedPost;
   }
 
-  // async getAllPosts(cursor?: string, limit: number = 10): Promise<Post[]> {
-  //   const posts = await prisma.post.findMany({
-  //     take: limit,
-  //     skip: cursor ? 1 : 0,
-  //     cursor: cursor ? { id: cursor } : undefined,
-  //     orderBy: {
-  //       createdAt: "desc",
-  //     },
-  //     select: {
-  //       id: true,
-  //       title: true,
-  //       description: true,
-  //       imageUrl: true,
-  //       createdAt: true,
-  //       updatedAt: true,
-  //       userId: true,
-  //     },
-  //   });
-  //   return posts;
-  // }
+  async deletePost(postId: string): Promise<void> {
+    await prisma.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+  }
 }

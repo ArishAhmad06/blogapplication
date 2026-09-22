@@ -40,4 +40,17 @@ export class PostService {
     const updatedPost = await this.repo.updatePost(postId, data);
     return updatedPost;
   }
+
+  async deletePost(postId: string, userId: string) {
+    const post = await this.repo.getPostByPostIdAndUserId(postId, userId);
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
+
+    // if (post.imageUrl) {
+    //   await this.fileService.delete(post.imageUrl);
+    // }
+    await this.repo.deletePost(postId);
+    return true;
+  }
 }

@@ -53,3 +53,15 @@ export const updatePostController = catchAsync(
   },
 );
 
+export const deletePostController = catchAsync(
+  async (req: Request, res: Response) => {
+    const postId = req.params.id as string;
+
+    await postService.deletePost(postId, req.userId as string);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Post deleted successfulluy",
+    });
+  },
+);
