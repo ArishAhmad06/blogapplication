@@ -43,3 +43,17 @@ export const getCommentByIdController = catchAsync(
     });
   },
 );
+
+export const deleteCommentByIdController = catchAsync(
+  async (req: Request, res: Response) => {
+    const commentId = req.params.commentId as string;
+    const userId = req.userId as string;
+
+    await commentService.deleteCommentById(commentId, userId);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Comment deleted successfully",
+    });
+  },
+);

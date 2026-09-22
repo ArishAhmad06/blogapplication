@@ -6,6 +6,7 @@ import {
   createCommentController,
   getCommentsByPostIdContoller,
   getCommentByIdController,
+  deleteCommentByIdController,
 } from "../comment/comment.controller.js";
 import { createCommentSchema } from "./comment.schema.js";
 import { authService } from "../auth/auth.container.js";
@@ -13,7 +14,14 @@ import { authService } from "../auth/auth.container.js";
 const router = express.Router();
 router
   .route("/:postId/comments")
-  .post(verifyUser(authService), validate(createCommentSchema), createCommentController)
+  .post(
+    verifyUser(authService),
+    validate(createCommentSchema),
+    createCommentController,
+  )
   .get(getCommentsByPostIdContoller);
-router.route("/:postId/comments/:commentId").get(getCommentByIdController);
+router
+  .route("/:postId/comments/:commentId")
+  .get(getCommentByIdController)
+  .delete(verifyUser(authService), deleteCommentByIdController);
 export default router;
