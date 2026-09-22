@@ -7,4 +7,6 @@ export interface ICommentRepository {
     userId: string,
     data: createCommentDTO,
   ): Promise<Comment>;
+
+  getCommentsByPostId(postId: string): Promise<Comment[]>;
 }

@@ -21,4 +21,15 @@ export class CommentService {
     );
     return newComment;
   }
+
+  async getCommentsByPostId(postId: string) {
+    const post = await this.postRepo.getPostById(postId);
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
+
+    const comments = await this.commentRepo.getCommentsByPostId(postId);
+
+    return comments;
+  }
 }

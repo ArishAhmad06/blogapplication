@@ -17,3 +17,17 @@ export const createCommentController = catchAsync(
     });
   },
 );
+
+export const getCommentsByPostIdContoller = catchAsync(
+  async (req: Request, res: Response) => {
+    const postId = req.params.postId as string;
+
+    const result = await commentService.getCommentsByPostId(postId);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Comments fetched successfully",
+      data: result,
+    });
+  },
+);
