@@ -7,7 +7,6 @@ export const createCommentController = catchAsync(
   async (req: Request, res: Response) => {
     const postId = req.params.postId as string;
     const userId = req.userId as string;
-
     const result = await commentService.createComment(postId, userId, req.body);
 
     sendResponse(res, 200, {
@@ -27,6 +26,19 @@ export const getCommentsByPostIdContoller = catchAsync(
     sendResponse(res, 200, {
       success: true,
       message: "Comments fetched successfully",
+      data: result,
+    });
+  },
+);
+
+export const getCommentByIdController = catchAsync(
+  async (req: Request, res: Response) => {
+    const commentId = req.params.commentId as string;
+    const result = await commentService.getCommentById(commentId);
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Comment fetched successfully",
       data: result,
     });
   },

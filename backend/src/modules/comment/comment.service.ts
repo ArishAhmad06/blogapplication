@@ -13,7 +13,6 @@ export class CommentService {
     if (!post) {
       throw new AppError("Post not found", 404);
     }
-
     const newComment = await this.commentRepo.createComment(
       postId,
       userId,
@@ -31,5 +30,13 @@ export class CommentService {
     const comments = await this.commentRepo.getCommentsByPostId(postId);
 
     return comments;
+  }
+
+  async getCommentById(commentId: string) {
+    const comment = await this.commentRepo.getCommentById(commentId);
+    if (!comment) {
+      throw new AppError("Comment not found", 404);
+    }
+    return comment;
   }
 }

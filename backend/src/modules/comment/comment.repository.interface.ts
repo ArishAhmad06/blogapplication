@@ -9,4 +9,6 @@ export interface ICommentRepository {
   ): Promise<Comment>;
 
   getCommentsByPostId(postId: string): Promise<Comment[]>;
+  getCommentById(commentId: string): Promise<Comment | null>;
+  // deleteCommentById(userId: string): Promise<void>;
 }

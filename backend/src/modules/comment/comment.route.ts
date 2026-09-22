@@ -5,13 +5,15 @@ import { verifyUser } from "../../middlewares/auth.middleware.js";
 import {
   createCommentController,
   getCommentsByPostIdContoller,
+  getCommentByIdController,
 } from "../comment/comment.controller.js";
 import { createCommentSchema } from "./comment.schema.js";
+import { authService } from "../auth/auth.container.js";
 
 const router = express.Router();
 router
   .route("/:postId/comments")
-  .post(verifyUser, validate(createCommentSchema), createCommentController)
+  .post(verifyUser(authService), validate(createCommentSchema), createCommentController)
   .get(getCommentsByPostIdContoller);
-
+router.route("/:postId/comments/:commentId").get(getCommentByIdController);
 export default router;
