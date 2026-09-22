@@ -1,4 +1,8 @@
-import { createCommentDTO, createCommentSchema } from "./comment.schema.js";
+import {
+  createCommentDTO,
+  createCommentSchema,
+  updateCommentDTO,
+} from "./comment.schema.js";
 import { ICommentRepository } from "./comment.repository.interface.js";
 import { AppError } from "../../utils/AppError.js";
 import { IPostReposiotory } from "../post/post.repository.interface.js";
@@ -38,6 +42,25 @@ export class CommentService {
       throw new AppError("Comment not found", 404);
     }
     return comment;
+  }
+
+  async updateCommentById(
+    commentId: string,
+    userId: string,
+    data: updateCommentDTO,
+  ) {
+    const comment = await this.commentRepo.getCommentById(commentId);
+    if (!comment) {
+      throw new AppError("Comment not found", 404);
+    }
+    if (comment.userId !== userId) {
+      throw new AppError("You are not allowed to update this comment", 403);
+    }
+    const updatedComment = await this.commentRepo.updateCommentById(
+      commentId,
+      data,
+    );
+    return updatedComment;
   }
 
   async deleteCommentById(commentId: string, userId: string) {

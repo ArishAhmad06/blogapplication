@@ -1,7 +1,7 @@
 import { Comment } from "../../../generated/prisma/index.js";
 import { prisma } from "../../lib/prisma.js";
 import { ICommentRepository } from "./comment.repository.interface.js";
-import { createCommentDTO } from "./comment.schema.js";
+import { createCommentDTO, updateCommentDTO } from "./comment.schema.js";
 
 export class CommentRepository implements ICommentRepository {
   async createComment(
@@ -43,5 +43,20 @@ export class CommentRepository implements ICommentRepository {
         id: commentId,
       },
     });
+  }
+
+  async updateCommentById(
+    commentId: string,
+    data: updateCommentDTO,
+  ): Promise<Comment> {
+    const updatedComment = await prisma.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        comment: data.comment,
+      },
+    });
+    return updatedComment;
   }
 }

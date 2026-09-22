@@ -7,8 +7,9 @@ import {
   getCommentsByPostIdContoller,
   getCommentByIdController,
   deleteCommentByIdController,
+  updateCommentByIdController,
 } from "../comment/comment.controller.js";
-import { createCommentSchema } from "./comment.schema.js";
+import { createCommentSchema, updateCommentSchema } from "./comment.schema.js";
 import { authService } from "../auth/auth.container.js";
 
 const router = express.Router();
@@ -23,5 +24,11 @@ router
 router
   .route("/:postId/comments/:commentId")
   .get(getCommentByIdController)
+  .patch(
+    verifyUser(authService),
+    validate(updateCommentSchema),
+    updateCommentByIdController,
+  )
   .delete(verifyUser(authService), deleteCommentByIdController);
+
 export default router;

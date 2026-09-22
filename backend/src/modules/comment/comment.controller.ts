@@ -44,6 +44,25 @@ export const getCommentByIdController = catchAsync(
   },
 );
 
+export const updateCommentByIdController = catchAsync(
+  async (req: Request, res: Response) => {
+    const commentId = req.params.commentId as string;
+    const userId = req.userId as string;
+
+    const result = await commentService.updateCommentById(
+      commentId,
+      userId,
+      req.body,
+    );
+
+    sendResponse(res, 200, {
+      success: true,
+      message: "Comment updated successfully",
+      data: result,
+    });
+  },
+);
+
 export const deleteCommentByIdController = catchAsync(
   async (req: Request, res: Response) => {
     const commentId = req.params.commentId as string;
