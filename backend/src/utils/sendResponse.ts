@@ -8,3 +8,5 @@ export const sendResponse = <T>(
 ) => {
   return res.status(statusCode).json(payload);
 };
+
+// sending response
